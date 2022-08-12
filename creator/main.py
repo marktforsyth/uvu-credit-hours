@@ -1,5 +1,3 @@
-# TODO: make the beginning and ending (the h1 title mostly) adapt based on which page it is :D
-# 2) make adaptive buttons
 import requests
 from bs4 import BeautifulSoup
 

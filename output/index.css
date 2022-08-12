@@ -17,11 +17,6 @@ a {
   margin-bottom: 2rem;
 }
 
-.nav-container {
-  /* display: grid;
-  grid-template-columns: 8fr 1fr; */
-}
-
 .nav-container > .hours {
   display: grid;
   grid-gap: 1rem;
