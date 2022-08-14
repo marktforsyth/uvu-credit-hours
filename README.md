@@ -12,4 +12,6 @@ cd creator
 python main.py
 ```
 
-The updated files are stored in the `output` folder, in the form of HTML and CSS. The website is completely static (there's not even any JavaScript, as of right now), and can be deployed anywhere with no configuration required.
+(EDIT: I'm currently updating this to a ReactJS project (which will also have static output generated), where the python file will output JSON used in the project. I'll update the documentation more as things progress :D)
+
+~~The updated files are stored in the `output` folder, in the form of HTML and CSS. The website is completely static (there's not even any JavaScript, as of right now), and can be deployed anywhere with no configuration required.~~

@@ -1,1 +1,26 @@
 creator/venv
+
+# Logs
+uvu-credit-hours-tool/logs
+uvu-credit-hours-tool/*.log
+uvu-credit-hours-tool/npm-debug.log*
+uvu-credit-hours-tool/yarn-debug.log*
+uvu-credit-hours-tool/yarn-error.log*
+uvu-credit-hours-tool/pnpm-debug.log*
+uvu-credit-hours-tool/lerna-debug.log*
+
+uvu-credit-hours-tool/node_modules
+uvu-credit-hours-tool/dist
+uvu-credit-hours-tool/dist-ssr
+uvu-credit-hours-tool/*.local
+
+# Editor directories and files
+uvu-credit-hours-tool/.vscode/*
+!uvu-credit-hours-tool/.vscode/extensions.json
+uvu-credit-hours-tool/.idea
+uvu-credit-hours-tool/.DS_Store
+uvu-credit-hours-tool/*.suo
+uvu-credit-hours-tool/*.ntvs*
+uvu-credit-hours-tool/*.njsproj
+uvu-credit-hours-tool/*.sln
+uvu-credit-hours-tool/*.sw?
