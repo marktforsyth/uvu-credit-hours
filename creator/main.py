@@ -1,5 +1,7 @@
-import requests
 from bs4 import BeautifulSoup
+import requests
+import re
+import json
 
 
 def fetch_data():
@@ -18,121 +20,74 @@ def fetch_data():
     return courses
 
 
-def get_courses(courses, credit_hours, no_prereq):
-    output = ''
+def process_course(course):
+    section_number = course.find(
+        class_='section_number').get_text().split()
+    title = course.find(class_='class_title').get_text()
 
-    for course in courses:
-        text = course.find(class_='credits').get_text().split()
+    credit_text = course.find(class_='credits').get_text().split()
+    if credit_text[1] == 'to':
+        credits = [float(credit_text[0]), float(credit_text[2])]
+    else:
+        credits = [float(credit_text[0])]
 
-        if (
-            (
-                (text[1] == 'to' and credit_hours >= float(text[0]) and credit_hours <= float(text[2])) or
-                float(text[0]) == float(credit_hours)
-            ) and
-            (
-                len(course.find_all(class_='prereq')) == 0 or
-                not no_prereq
-            )
-        ):
-            output += course.prettify()
+    prereq_text = course.find_all(class_='prereq')
+    if prereq_text:
+        prereqs = [re.sub(r'\s+', ' ', prereq.get_text()).strip()
+                   for prereq in prereq_text]
+    else:
+        prereqs = []
 
-    return output
+    description = re.sub(r'\s+', ' ', course.find('p').get_text()).strip()
 
-
-def gen_normal_file(credit_hours):
-    if credit_hours == 1:
-        return 'index.html'
-
-    return f'{credit_hours}-credit-hours.html'
+    return {
+        'sectionNumber': section_number,
+        'title': title,
+        'creditHours': credits,
+        'prereqs': prereqs,
+        'description': description
+    }
 
 
-def gen_link(credit_hours, no_prereq, current):
-    if current:
-        return f'<div>{credit_hours}</div>'
-    
-    if no_prereq:
-        return f'<a href="./{credit_hours}-credit-hours-no-prereq.html">{credit_hours}</a>'
+def possible_values(raw_html):
+    possible_subjects = []
+    possible_credit_hours = []
 
-    return f'<a href="./{gen_normal_file(credit_hours)}">{credit_hours}</a>'
+    for course in raw_html:
+        subjects = [course.find(
+            class_='section_number').get_text().split()[0]]
+        credit_text = course.find(class_='credits').get_text().split()
+
+        if credit_text[1] == 'to':
+            credits = [float(credit_text[0]), float(credit_text[2])]
+        else:
+            credits = [float(credit_text[0])]
+
+        new_subjects = [
+            subject for subject in subjects if subject not in possible_subjects]
+        new_credit_hours = [
+            float(credit) for credit in credits if float(credit) not in possible_credit_hours]
+
+        possible_subjects += new_subjects
+        possible_credit_hours += new_credit_hours
+
+    return possible_subjects, possible_credit_hours
 
 
 def main():
-    courses = fetch_data()
-    possible_hours = [0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 11, 12]
+    raw_html = fetch_data()
+    output = [process_course(course)
+              for course in raw_html]
+    possible_subjects, possible_credit_hours = possible_values(raw_html)
 
-    # beginning = '''<!DOCTYPE html>
-    # <html>
-    # <head>
-    #     <meta charset="utf-8">
-    #     <meta name="viewport" content="width=device-width, initial-scale=1">
-    #     <title>UVU Courses by Credit Hour</title>
-    #     <link rel="stylesheet" type="text/css" href="index.css">
-    #     <link rel="stylesheet" type="text/css" href="media-queries.css">
-    # </head>
-    # <body>
-    #     <script src='index.js'></script>
-    #     <h1 class='main-title'>Courses By Credit Hour</h1>
-    #     <div class='courses'>
-    # '''
-    ending = '''
-        </div>
-    </body>
-    </html>
-    '''
+    with open('../uvu-credit-hours-tool/data/courses.json', 'w', encoding='utf-8') as courses:
+        courses.write(json.dumps(output))
 
-    for hour in possible_hours:
-        normal_nav_hours = '\n'.join([gen_link(credit_hours, False, credit_hours == hour) for credit_hours in possible_hours])
-        normal_beginning = f'''<!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>UVU Courses by Credit Hour - {hour}</title>
-            <link rel="stylesheet" type="text/css" href="index.css">
-            <link rel="stylesheet" type="text/css" href="media-queries.css">
-        </head>
-        <body>
-            <script src="index.js"></script>
-            <h1 class="main-title">Courses By Credit Hour - {hour}</h1>
-            <div class="nav-container">
-                <div class="hours">
-                    {normal_nav_hours}
-                </div>
-                <a class="no-prereq" href="./{hour}-credit-hours-no-prereq.html">No Prerequisites <div></div></a>
-            </div>
-            <div class="courses">
-        '''
+    with open('../uvu-credit-hours-tool/data/possible-subjects.json', 'w', encoding='utf-8') as possible_subjects_output:
+        possible_subjects_output.write(json.dumps(possible_subjects))
 
-        no_prereq_nav_hours = '\n'.join([gen_link(credit_hours, True, credit_hours == hour) for credit_hours in possible_hours])
-        no_prereq_beginning = f'''<!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>UVU Courses by Credit Hour - {hour} (No Prereq)</title>
-            <link rel="stylesheet" type="text/css" href="index.css">
-            <link rel="stylesheet" type="text/css" href="media-queries.css">
-        </head>
-        <body>
-            <script src="index.js"></script>
-            <h1 class="main-title">Courses By Credit Hour - {hour} (No Prereq)</h1>
-            <div class="nav-container">
-                <div class="hours">
-                    {no_prereq_nav_hours}
-                </div>
-                <a class="no-prereq" href="./{gen_normal_file(hour)}">No Prerequisites <div>✓</div></a>
-            </div>
-            <div class="courses">
-        '''
-
-        normal = get_courses(courses, hour, False)
-        no_prereq = get_courses(courses, hour, True)
-
-        with open(f'../output/{gen_normal_file(hour)}', 'w', encoding='utf-8') as output_html:
-            output_html.write(normal_beginning + normal + ending)
-
-        with open(f'../output/{hour}-credit-hours-no-prereq.html', 'w', encoding='utf-8') as output_html:
-            output_html.write(no_prereq_beginning + no_prereq + ending)
+    with open('../uvu-credit-hours-tool/data/possible-credit-hours.json', 'w', encoding='utf-8') as possible_credit_hours_output:
+        possible_credit_hours_output.write(json.dumps(possible_credit_hours))
 
 
 if __name__ == '__main__':
