@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-
 import courses from "../../data/courses.json";
 
 import { Styles, State } from "../common/types";
@@ -134,8 +132,6 @@ const renderCourses = (state: State): JSX.Element => {
       </div>
     );
   }
-
-  // useEffect(() => {}, [])
 
   return (
     <div style={styles.page}>

@@ -87,7 +87,7 @@ def main():
         possible_subjects_output.write(json.dumps(possible_subjects))
 
     with open('../uvu-credit-hours-tool/data/possible-credit-hours.json', 'w', encoding='utf-8') as possible_credit_hours_output:
-        possible_credit_hours_output.write(json.dumps(possible_credit_hours))
+        possible_credit_hours_output.write(json.dumps(sorted(possible_credit_hours)))
 
 
 if __name__ == '__main__':
