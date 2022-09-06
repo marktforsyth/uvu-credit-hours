@@ -12,6 +12,11 @@ cd creator
 python main.py
 ```
 
-(EDIT: I'm currently updating this to a ReactJS project (which will also have static output generated), where the python file will output JSON used in the project. I'll update the documentation more as things progress :D)
+The data is then dropped into `uvu-credit-hours-tool/data`. To generate the static website from the ReactJS Typescript code, run the following commands:
 
-~~The updated files are stored in the `output` folder, in the form of HTML and CSS. The website is completely static (there's not even any JavaScript, as of right now), and can be deployed anywhere with no configuration required.~~
+```
+cd uvu-credit-hours-tool
+yarn build
+```
+
+Then, simply deploy the contents of the `uvu-credit-hours-tool/dist` folder! Good luck :)
