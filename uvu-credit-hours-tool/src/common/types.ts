@@ -11,6 +11,15 @@ type State = {
   noPrereqs: boolean;
   categoryOpen: boolean;
   creditHoursOpen: boolean;
+  howManyCourses: number;
 };
 
-export type { Styles, State };
+type Course = {
+  sectionNumber: Array<string>;
+  title: string;
+  creditHours: Array<number>;
+  prereqs: Array<string>;
+  description: string;
+};
+
+export type { Styles, State, Course };

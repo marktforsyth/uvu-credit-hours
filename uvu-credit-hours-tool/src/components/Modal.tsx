@@ -1,3 +1,5 @@
+import { css } from "@emotion/react";
+
 import { Styles } from "../common/types";
 
 import possibleSubjects from "../../data/possible-subjects.json";
@@ -64,35 +66,41 @@ const Modal = ({ dispatch, open, keyword }: Props): JSX.Element => {
 
   return (
     <div
-      style={styles.modalBackground}
+      css={css(styles.modalBackground)}
       onClick={(event) => {
-        if ((event.target as HTMLElement).style.width !== "100vw") {
+        if (
+          !(event.target as HTMLElement).innerText.startsWith(
+            "Any\nACC\nAERO",
+          ) &&
+          !(event.target as HTMLElement).innerText.startsWith("Any\n0.5\n1")
+        ) {
           return;
         }
-        dispatch({ type: `toggle-${keyword}-open`, payload: "" });
+
+        dispatch({ type: `toggle-${keyword}-open` });
       }}
     >
-      <div style={styles.modal}>
-        <div style={styles.modalContent}>
+      <div css={css(styles.modal)}>
+        <div css={css(styles.modalContent)}>
           <div
-            style={styles.modalBtn}
+            css={css(styles.modalBtn)}
             onClick={() => {
               dispatch({
                 type: keyword,
-                payload: keyword === "category" ? "Any" : "0",
+                payload: keyword === "category" ? "Any" : 0,
               });
-              dispatch({ type: `toggle-${keyword}-open`, payload: "" });
+              dispatch({ type: `toggle-${keyword}-open` });
             }}
           >
             Any
           </div>
           {possibleItems(keyword).map((subject, s) => (
             <div
-              style={styles.modalBtn}
+              css={css(styles.modalBtn)}
               key={`subject-btn-${s}`}
               onClick={() => {
                 dispatch({ type: keyword, payload: subject });
-                dispatch({ type: `toggle-${keyword}-open`, payload: "" });
+                dispatch({ type: `toggle-${keyword}-open` });
               }}
             >
               {subject}
