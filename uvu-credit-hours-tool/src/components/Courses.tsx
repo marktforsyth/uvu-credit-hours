@@ -54,6 +54,9 @@ const styles: Styles = {
     justifyContent: "center",
     alignItems: "center",
     color: "#275d38",
+
+    [mq[1]]: { height: "calc(100vh - 8rem)" },
+    [mq[1]]: { height: "calc(100vh - 11rem)" },
   },
 };
 
