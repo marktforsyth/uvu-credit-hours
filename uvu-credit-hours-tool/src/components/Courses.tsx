@@ -1,6 +1,5 @@
-import { css } from "@emotion/react";
-
 import filteredCourses from "../common/filtered-courses";
+import mq from "../common/breakpoints";
 import type { Styles, State, Course } from "../common/types";
 
 type Props = {
@@ -13,7 +12,16 @@ const styles: Styles = {
     margin: "1rem 0 1rem 0",
     display: "grid",
     gridGap: "1rem",
-    gridTemplateColumns: "repeat(2, max(50%))",
+    gridTemplateColumns: "1fr 1fr",
+
+    [mq[1]]: {
+      width: "calc(100vw - 2rem)",
+    },
+    [mq[0]]: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "1rem",
+    },
   },
   course: {
     backgroundColor: "#eeeeee",
@@ -51,7 +59,6 @@ const styles: Styles = {
 
 const visibleCourses = (state: State): Array<Course> => {
   const filtered = filteredCourses(state);
-  console.log(state.howManyCourses);
   return filtered.filter((_course, c) => c <= state.howManyCourses);
 };
 
@@ -74,33 +81,28 @@ const renderCourses = (state: State): JSX.Element => {
 
   if (visible.length === 0) {
     return (
-      <div css={css(styles.searchNotFound)}>
+      <div css={styles.searchNotFound}>
         No courses match your search; please try again.
       </div>
     );
   }
 
   return (
-    <div css={css(styles.page)}>
+    <div css={styles.page}>
       {visible.map((course, c) => {
         return (
-          <div css={css(styles.course)} key={`course-${c}`}>
-            <div css={css(styles.subtitle)}>
-              {course.sectionNumber.join(" ")}
-            </div>
-            <div css={css(styles.title)}>{course.title}</div>
-            <div css={css(styles.subtitle)}>
+          <div css={styles.course} key={`course-${c}`}>
+            <div css={styles.subtitle}>{course.sectionNumber.join(" ")}</div>
+            <div css={styles.title}>{course.title}</div>
+            <div css={styles.subtitle}>
               {renderCreditHours(course.creditHours)} Credit Hours
             </div>
             {course.prereqs.map((prereq, p) => (
-              <div
-                css={css(styles.description)}
-                key={`course-${c}-prereq-${p}`}
-              >
+              <div css={styles.description} key={`course-${c}-prereq-${p}`}>
                 {prereq}
               </div>
             ))}
-            <div css={css(styles.description)}>{course.description}</div>
+            <div css={styles.description}>{course.description}</div>
           </div>
         );
       })}

@@ -52,8 +52,7 @@ button {
 *::-webkit-scrollbar-track,
 *::-webkit-scrollbar-track:hover,
 *::-webkit-scrollbar-track:active {
-  background-color: transparent;
-  margin-block: 1px;
+  background-color: #eeeeee;
   box-shadow: none;
 }
 

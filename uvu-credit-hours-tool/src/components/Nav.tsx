@@ -1,5 +1,4 @@
-import { css } from "@emotion/react";
-
+import mq from "../common/breakpoints";
 import type { Styles, State } from "../common/types";
 
 type Props = {
@@ -22,6 +21,9 @@ const styles: Styles = {
     BoxShadow: "0 5px 25px -2px rgba(0,0,0,0.2)",
     WebkitBoxShadow: "0 5px 25px -2px rgba(0,0,0,0.2)",
     MozBoxShadow: "0 5px 25px -2px rgba(0,0,0,0.2)",
+
+    [mq[1]]: { height: "6rem" },
+    [mq[0]]: { height: "9rem" },
   },
   navItems: {
     width: "70%",
@@ -29,6 +31,12 @@ const styles: Styles = {
     justifyContent: "space-between",
     alignItems: "center",
     letterSpacing: "1px",
+
+    [mq[1]]: {
+      flexDirection: "column",
+      gap: "1rem",
+      width: "calc(100% - 4rem)",
+    },
   },
   searchBar: {
     borderRadius: "2rem",
@@ -39,12 +47,29 @@ const styles: Styles = {
     backgroundColor: "#eeeeee",
     padding: "1rem",
     outline: "none",
-    width: "30vw",
+    width: "100%",
+  },
+  labeledNavTools: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+
+    [mq[0]]: {
+      flexDirection: "column",
+      gap: "1rem",
+    },
+  },
+  dropDownTools: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   labeledNavTool: {
     display: "flex",
     alignItems: "center",
     fontWeight: "normal",
+    marginLeft: "1rem",
+    whiteSpace: "nowrap",
   },
   navBtn: {
     backgroundColor: "#eeeeee",
@@ -69,43 +94,45 @@ const styles: Styles = {
 
 const Nav = ({ dispatch, state }: Props): JSX.Element => {
   return (
-    <div css={css(styles.nav)}>
-      <div css={css(styles.navItems)}>
+    <div css={styles.nav}>
+      <div css={styles.navItems}>
         <input
-          css={css(styles.searchBar)}
+          css={styles.searchBar}
           type="text"
           placeholder="Search by title"
           onChange={(event) => {
             dispatch({ type: "title", payload: event.target.value });
           }}
         ></input>
-        <div css={css(styles.labeledNavTool)}>
-          Category
-          <div
-            css={css({ ...styles.navBtn, width: "5rem" })}
-            onClick={() => dispatch({ type: "toggle-category-open" })}
-          >
-            {state.category}
+        <div css={styles.labeledNavTools}>
+          <div css={styles.dropDownTools}>
+            <div css={styles.labeledNavTool}>
+              Category
+              <div
+                css={{ ...styles.navBtn, width: "5rem" }}
+                onClick={() => dispatch({ type: "toggle-category-open" })}
+              >
+                {state.category}
+              </div>
+            </div>
+            <div css={styles.labeledNavTool}>
+              Credit Hours
+              <div
+                css={styles.navBtn}
+                onClick={() => dispatch({ type: "toggle-credit-hours-open" })}
+              >
+                {state.creditHours === 0 ? "A" : state.creditHours}
+              </div>
+            </div>
           </div>
-        </div>
-        <div css={css(styles.labeledNavTool)}>
-          Credit Hours
-          <div
-            css={css(styles.navBtn)}
-            onClick={() => dispatch({ type: "toggle-credit-hours-open" })}
-          >
-            {state.creditHours === 0 ? "A" : state.creditHours}
-          </div>
-        </div>
-        <div css={css(styles.labeledNavTool)}>
-          No Prereqs
-          <div
-            css={css({ ...styles.navBtn, width: "2rem" })}
-            onClick={() => dispatch({ type: "no-prereqs" })}
-          >
-            {state.noPrereqs ? (
-              <div css={css(styles.checkBoxInner)}></div>
-            ) : null}
+          <div css={styles.labeledNavTool}>
+            No Prereqs
+            <div
+              css={{ ...styles.navBtn, width: "2rem" }}
+              onClick={() => dispatch({ type: "no-prereqs" })}
+            >
+              {state.noPrereqs ? <div css={styles.checkBoxInner}></div> : null}
+            </div>
           </div>
         </div>
       </div>

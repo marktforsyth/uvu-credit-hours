@@ -1,6 +1,6 @@
-import { css } from "@emotion/react";
-
 import { Styles } from "../common/types";
+
+import mq from "../common/breakpoints";
 
 import possibleSubjects from "../../data/possible-subjects.json";
 import possibleCreditHours from "../../data/possible-credit-hours.json";
@@ -29,14 +29,25 @@ const styles: Styles = {
     width: "30vw",
     border: "1px solid #275d38",
     color: "#275d38",
+
+    [mq[1]]: {
+      width: "60vw",
+    },
+    [mq[0]]: {
+      width: "80vw",
+    },
   },
   modalContent: {
-    overflow: "scroll",
+    overflow: "auto",
     maxHeight: "80vh",
     paddingRight: "1rem",
     display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr 1fr",
+    gridTemplateColumns: "1fr 1fr 1fr",
     gridGap: "1rem",
+
+    [mq[1]]: {
+      gridTemplateColumns: "1fr 1fr 1fr",
+    },
   },
   modalBtn: {
     backgroundColor: "#eeeeee",
@@ -66,7 +77,7 @@ const Modal = ({ dispatch, open, keyword }: Props): JSX.Element => {
 
   return (
     <div
-      css={css(styles.modalBackground)}
+      css={styles.modalBackground}
       onClick={(event) => {
         if (
           !(event.target as HTMLElement).innerText.startsWith(
@@ -80,10 +91,10 @@ const Modal = ({ dispatch, open, keyword }: Props): JSX.Element => {
         dispatch({ type: `toggle-${keyword}-open` });
       }}
     >
-      <div css={css(styles.modal)}>
-        <div css={css(styles.modalContent)}>
+      <div css={styles.modal}>
+        <div css={styles.modalContent}>
           <div
-            css={css(styles.modalBtn)}
+            css={styles.modalBtn}
             onClick={() => {
               dispatch({
                 type: keyword,
@@ -96,7 +107,7 @@ const Modal = ({ dispatch, open, keyword }: Props): JSX.Element => {
           </div>
           {possibleItems(keyword).map((subject, s) => (
             <div
-              css={css(styles.modalBtn)}
+              css={styles.modalBtn}
               key={`subject-btn-${s}`}
               onClick={() => {
                 dispatch({ type: keyword, payload: subject });

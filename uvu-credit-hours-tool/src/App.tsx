@@ -1,10 +1,10 @@
 import { useEffect, useReducer, useRef } from "react";
-import { css } from "@emotion/react";
 
 import Nav from "./components/Nav";
 import Courses from "./components/Courses";
 import Modal from "./components/Modal";
 
+import mq from "./common/breakpoints";
 import filteredCourses from "./common/filtered-courses";
 import type { Styles, State } from "./common/types";
 
@@ -20,7 +20,11 @@ const styles: Styles = {
     width: "100%",
     marginTop: "5rem",
     overflow: "scroll",
+    overflowX: "hidden",
     height: "calc(100vh - 5rem)",
+
+    [mq[1]]: { marginTop: "8rem", height: "calc(100vh - 8rem)" },
+    [mq[0]]: { marginTop: "11rem", height: "calc(100vh - 11rem)" },
   },
 };
 
@@ -98,7 +102,7 @@ const App = (): JSX.Element => {
   return (
     <div>
       <Nav dispatch={dispatch} state={state} />
-      <div css={css(css(styles.pageContainer))} ref={coursesRef}>
+      <div css={styles.pageContainer} ref={coursesRef}>
         <Courses state={state} />
       </div>
 

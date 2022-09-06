@@ -1,6 +1,6 @@
 type Styles = {
   [className: string]: {
-    [style: string]: string;
+    [style: string]: string | { [style: string]: string };
   };
 };
 
