@@ -1,4 +1,5 @@
 creator/venv
+creator/__pycache__
 
 # Logs
 uvu-credit-hours-tool/logs
