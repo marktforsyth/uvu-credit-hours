@@ -13,21 +13,6 @@ type Action = {
   payload?: string | number;
 };
 
-const styles: Styles = {
-  pageContainer: {
-    display: "flex",
-    justifyContent: "center",
-    width: "100%",
-    marginTop: "5rem",
-    overflow: "scroll",
-    overflowX: "hidden",
-    height: "calc(100vh - 5rem)",
-
-    [mq[1]]: { marginTop: "8rem", height: "calc(100vh - 8rem)" },
-    [mq[0]]: { marginTop: "11rem", height: "calc(100vh - 11rem)" },
-  },
-};
-
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "title":
@@ -63,6 +48,24 @@ const reducer = (state: State, action: Action): State => {
 };
 
 const App = (): JSX.Element => {
+  const lightTheme = window.matchMedia("(prefers-color-scheme: light)").matches;
+
+  const styles: Styles = {
+    pageContainer: {
+      display: "flex",
+      justifyContent: "center",
+      backgroundColor: lightTheme ? "#ffffff" : "#202124",
+      width: "100%",
+      marginTop: "5rem",
+      overflow: "scroll",
+      overflowX: "hidden",
+      height: "calc(100vh - 5rem)",
+
+      [mq[1]]: { marginTop: "8rem", height: "calc(100vh - 8rem)" },
+      [mq[0]]: { marginTop: "11rem", height: "calc(100vh - 11rem)" },
+    },
+  };
+
   const initial = {
     titleSearch: "",
     category: "Any",

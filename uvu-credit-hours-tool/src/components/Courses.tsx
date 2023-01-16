@@ -6,60 +6,6 @@ type Props = {
   state: State;
 };
 
-const styles: Styles = {
-  page: {
-    width: "60vw",
-    margin: "1rem 0 1rem 0",
-    display: "grid",
-    gridGap: "1rem",
-    gridTemplateColumns: "1fr 1fr",
-
-    [mq[1]]: {
-      width: "calc(100vw - 2rem)",
-    },
-    [mq[0]]: {
-      display: "flex",
-      flexDirection: "column",
-      gap: "1rem",
-    },
-  },
-  course: {
-    backgroundColor: "#eeeeee",
-    borderRadius: "2rem",
-    padding: "2rem",
-    wordWrap: "break-word",
-  },
-  title: {
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-    marginBottom: "1rem",
-  },
-  subtitle: {
-    fontSize: "1.2rem",
-  },
-  description: {
-    fontSize: "1rem",
-    lineHeight: "1.5",
-    letterSpacing: "1px",
-    marginTop: "1rem",
-  },
-  searchNotFound: {
-    width: "60vw",
-    height: "calc(100vh - 6rem)",
-    fontSize: "1.5rem",
-    textAlign: "center",
-    letterSpacing: "2px",
-    lineHeight: "1.5",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#275d38",
-
-    [mq[1]]: { height: "calc(100vh - 8rem)" },
-    [mq[1]]: { height: "calc(100vh - 11rem)" },
-  },
-};
-
 const visibleCourses = (state: State): Array<Course> => {
   const filtered = filteredCourses(state);
   return filtered.filter((_course, c) => c <= state.howManyCourses);
@@ -80,6 +26,63 @@ const renderCreditHours = (creditHours: Array<number>) => {
 };
 
 const renderCourses = (state: State): JSX.Element => {
+  const lightTheme = window.matchMedia("(prefers-color-scheme: light)").matches;
+
+  const styles: Styles = {
+    page: {
+      width: "60vw",
+      margin: "1rem 0 1rem 0",
+      display: "grid",
+      gridGap: "1rem",
+      gridTemplateColumns: "1fr 1fr",
+
+      [mq[1]]: {
+        width: "calc(100vw - 2rem)",
+      },
+      [mq[0]]: {
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+      },
+    },
+    course: {
+      backgroundColor: lightTheme ? "#eeeeee" : "#303134",
+      color: lightTheme ? "#000000" : "#bdc1c6",
+      borderRadius: "2rem",
+      padding: "2rem",
+      wordWrap: "break-word",
+    },
+    title: {
+      fontSize: "1.5rem",
+      fontWeight: "bold",
+      marginBottom: "1rem",
+    },
+    subtitle: {
+      fontSize: "1.2rem",
+    },
+    description: {
+      fontSize: "1rem",
+      lineHeight: "1.5",
+      letterSpacing: "1px",
+      marginTop: "1rem",
+    },
+    searchNotFound: {
+      width: "60vw",
+      height: "calc(100vh - 6rem)",
+      fontSize: "1.5rem",
+      textAlign: "center",
+      letterSpacing: "2px",
+      lineHeight: "1.5",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      color: lightTheme ? "#275d38" : "#8bc19c",
+
+      [mq[1]]: { height: "calc(100vh - 8rem)" },
+      [mq[1]]: { height: "calc(100vh - 11rem)" },
+    },
+  };
+
   const visible = visibleCourses(state);
 
   if (visible.length === 0) {

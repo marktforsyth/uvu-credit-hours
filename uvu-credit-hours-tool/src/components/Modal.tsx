@@ -11,54 +11,6 @@ type Props = {
   keyword: string;
 };
 
-const styles: Styles = {
-  modalBackground: {
-    position: "fixed",
-    top: "0",
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "rgba(200, 200, 200, 0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modal: {
-    backgroundColor: "white",
-    borderRadius: "2rem",
-    padding: "2rem 1rem 2rem 2rem",
-    width: "30vw",
-    border: "1px solid #275d38",
-    color: "#275d38",
-
-    [mq[1]]: {
-      width: "60vw",
-    },
-    [mq[0]]: {
-      width: "80vw",
-    },
-  },
-  modalContent: {
-    overflow: "auto",
-    maxHeight: "80vh",
-    paddingRight: "1rem",
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr",
-    gridGap: "1rem",
-
-    [mq[1]]: {
-      gridTemplateColumns: "1fr 1fr 1fr",
-    },
-  },
-  modalBtn: {
-    backgroundColor: "#eeeeee",
-    borderRadius: "2rem",
-    padding: "1rem",
-    textAlign: "center",
-    cursor: "pointer",
-    userSelect: "none",
-  },
-};
-
 const possibleItems = (keyword: string): Array<string | number> => {
   if (keyword === "category") {
     return possibleSubjects;
@@ -74,6 +26,58 @@ const possibleItems = (keyword: string): Array<string | number> => {
 
 const Modal = ({ dispatch, open, keyword }: Props): JSX.Element => {
   if (!open) return <div></div>;
+
+  const lightTheme = window.matchMedia("(prefers-color-scheme: light)").matches;
+
+  const styles: Styles = {
+    modalBackground: {
+      position: "fixed",
+      top: "0",
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: lightTheme
+        ? "rgba(200 200 200 / 50%)"
+        : "rgb(110 110 110 / 50%)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    modal: {
+      backgroundColor: lightTheme ? "#ffffff" : "#202124",
+      borderRadius: "2rem",
+      padding: "2rem 1rem 2rem 2rem",
+      width: "30vw",
+      border: lightTheme ? "1px solid #275d38" : "none",
+      color: lightTheme ? "#275d38" : "#8bc19c",
+
+      [mq[1]]: {
+        width: "60vw",
+      },
+      [mq[0]]: {
+        width: "80vw",
+      },
+    },
+    modalContent: {
+      overflow: "auto",
+      maxHeight: "80vh",
+      paddingRight: "1rem",
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gridGap: "1rem",
+
+      [mq[1]]: {
+        gridTemplateColumns: "1fr 1fr 1fr",
+      },
+    },
+    modalBtn: {
+      backgroundColor: lightTheme ? "#eeeeee" : "#303134",
+      borderRadius: "2rem",
+      padding: "1rem",
+      textAlign: "center",
+      cursor: "pointer",
+      userSelect: "none",
+    },
+  };
 
   return (
     <div
